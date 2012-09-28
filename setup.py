@@ -1,7 +1,19 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1b8'
+
+def get_git_version(abbrev=4):
+    from subprocess import Popen, PIPE
+    try:
+        p = Popen(['git', 'rev-parse', 'HEAD'],
+                  stdout=PIPE, stderr=PIPE)
+        p.stderr.close()
+        line = p.stdout.readlines()[0]
+        return '-' + line.strip()[:abbrev]
+    except:
+        return ''
+
+version = '0.1b8' + get_git_version()
 
 setup(name='collective.cmfeditionsdexteritycompat',
       version=version,
@@ -29,7 +41,7 @@ setup(name='collective.cmfeditionsdexteritycompat',
         'five.grok',
         'z3c.autoinclude'
       ],
-      
+
       extras_require = {
         'test': [
             'plone.app.testing',
@@ -37,13 +49,13 @@ setup(name='collective.cmfeditionsdexteritycompat',
             'plone.app.versioningbehavior',
             'Products.CMFPlone',
             'Products.CMFEditions',
-            'Products.CMFDiffTool',            
-            
+            'Products.CMFDiffTool',
+
         ]
       },
-      
-      entry_points="""      
+
+      entry_points="""
       [z3c.autoinclude.plugin]
       target = plone
-      """,      
+      """,
 )
